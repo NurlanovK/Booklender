@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "fullName": "Дмитрий Сергеевич",
+    "listCurrentBooks": 10,
+    "listPastBooks": 5,
+    "currentBooks": ["1984","Harry Potter"],
+    "pastBooks": ["Naruto", "It"]
+  },
+  {
+    "id": 2,
+    "fullName": "Василий Георгиевич",
+    "listCurrentBooks": 2,
+    "listPastBooks": 2,
+    "currentBooks": ["1984","Harry Potter"],
+    "pastBooks": ["Naruto", "It"]
+  },
+  {
+    "id": 3,
+    "fullName": "Иванов Иван",
+    "listCurrentBooks": 8,
+    "listPastBooks": 3,
+    "currentBooks": ["1984","Harry Potter"],
+    "pastBooks": ["Naruto", "It"]
+  },
+  {
+    "id": 4,
+    "fullName": "Петров Петр",
+    "listCurrentBooks": 7,
+    "listPastBooks": 2,
+    "currentBooks": ["1984","Harry Potter"],
+    "pastBooks": ["Naruto", "It"]
+  }
+]

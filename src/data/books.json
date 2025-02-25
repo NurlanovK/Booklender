@@ -1,0 +1,43 @@
+[
+  {
+    "id": 1,
+    "title": "Harry Potter",
+    "author": "Joanne Rowling",
+    "description": "A story about a young wizard.",
+    "status": "Free",
+    "cover": "/images/1984-Big-Brother.jpg"
+  },
+  {
+    "id": 2,
+    "title": "Sherlock Holmes",
+    "author": "Arthur Conan Doyle",
+    "description": "A detective solving mysteries.",
+    "status": "Busy",
+    "cover": "/images/1984-Big-Brother.jpg"
+
+  },
+  {
+    "id": 3,
+    "title": "1984",
+    "author": "George Orwell",
+    "description": "A dystopian novel about totalitarianism.",
+    "status": "Free",
+    "cover": "/images/1984-Big-Brother.jpg"
+  },
+  {
+    "id": 4,
+    "title": "The Invisible Man",
+    "author": "Ralph Ellison",
+    "description": "A novel about social issues.",
+    "status": "Free",
+    "cover": "/images/1984-Big-Brother.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Gone with the Wind",
+    "author": "Margaret Mitchell",
+    "description": "A historical romance novel.",
+    "status": "Busy",
+    "cover": "/images/1984-Big-Brother.jpg"
+  }
+]

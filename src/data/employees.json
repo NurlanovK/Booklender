@@ -2,33 +2,81 @@
   {
     "id": 1,
     "fullName": "Дмитрий Сергеевич",
-    "listCurrentBooks": 10,
-    "listPastBooks": 5,
-    "currentBooks": ["1984","Harry Potter"],
-    "pastBooks": ["Naruto", "It"]
+    "email": "dmitriy@example.com",
+    "password": "password1",
+    "currentBooks": [
+      "1984",
+      "Harry Potter"
+    ],
+    "pastBooks": [
+      "Naruto",
+      "It"
+    ]
   },
   {
     "id": 2,
     "fullName": "Василий Георгиевич",
-    "listCurrentBooks": 2,
-    "listPastBooks": 2,
-    "currentBooks": ["1984","Harry Potter"],
-    "pastBooks": ["Naruto", "It"]
+    "email": "vasiliy@example.com",
+    "password": "password2",
+    "currentBooks": [
+      "1984",
+      "Harry Potter"
+    ],
+    "pastBooks": [
+      "Naruto",
+      "It"
+    ]
   },
   {
     "id": 3,
     "fullName": "Иванов Иван",
-    "listCurrentBooks": 8,
-    "listPastBooks": 3,
-    "currentBooks": ["1984","Harry Potter"],
-    "pastBooks": ["Naruto", "It"]
+    "email": "ivanov@example.com",
+    "password": "password3",
+    "currentBooks": [
+      "1984",
+      "Harry Potter"
+    ],
+    "pastBooks": [
+      "Naruto",
+      "It"
+    ]
   },
   {
     "id": 4,
     "fullName": "Петров Петр",
-    "listCurrentBooks": 7,
-    "listPastBooks": 2,
-    "currentBooks": ["1984","Harry Potter"],
-    "pastBooks": ["Naruto", "It"]
+    "email": "petrov@example.com",
+    "password": "password4",
+    "currentBooks": [
+      "1984",
+      "Harry Potter"
+    ],
+    "pastBooks": [
+      "Naruto",
+      "It"
+    ]
+  },
+  {
+    "id": 5,
+    "fullName": "asdas",
+    "email": "sadas",
+    "password": "dasd",
+    "currentBooks": [],
+    "pastBooks": []
+  },
+  {
+    "id": 6,
+    "fullName": "kuba",
+    "email": "kuba.nuralnov@mail.ru",
+    "password": "parol",
+    "currentBooks": [],
+    "pastBooks": []
+  },
+  {
+    "id": 7,
+    "fullName": "asd",
+    "email": "adsd",
+    "password": "asdasdsad",
+    "currentBooks": [],
+    "pastBooks": []
   }
 ]

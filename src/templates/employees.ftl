@@ -26,6 +26,7 @@
         </#list>
     </table>
     <br>
-    <a href="index">На главную</a>
+    <a href="index">На главную</a><br>
+    <a href="register">Зарегистрировать нового сотрудника</a>
 </body>
 </html>

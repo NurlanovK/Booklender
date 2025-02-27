@@ -28,7 +28,6 @@ public class RequestHandler {
         Type employeesListType = new TypeToken<List<Employees>>() {}.getType();
         employees = Utils.readFile("src/data/employees.json", employeesListType);
 
-        // Регистрируем контексты для различных путей
         server.createContext("/", this::indexHtmlHandler);
         server.createContext("/books", this::freemarkerBooksHandler);
         server.createContext("/employees", this::freemarkerEmployeesHandler);

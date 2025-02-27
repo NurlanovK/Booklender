@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
 public class RequestHandler {
     private HttpServer server;
     private List<Books> books;
@@ -29,12 +28,13 @@ public class RequestHandler {
         Type employeesListType = new TypeToken<List<Employees>>() {}.getType();
         employees = Utils.readFile("src/data/employees.json", employeesListType);
 
+        // Регистрируем контексты для различных путей
         server.createContext("/", this::indexHtmlHandler);
         server.createContext("/books", this::freemarkerBooksHandler);
         server.createContext("/employees", this::freemarkerEmployeesHandler);
         server.createContext("/book-details", this::singleBookHandler);
         server.createContext("/employees-details", this::singleEmployeeHandler);
-
+        server.createContext("/register", this::registerHandler); // Контекст для регистрации
         server.createContext("/images", this::serveImage);
     }
 
@@ -91,6 +91,50 @@ public class RequestHandler {
     private void freemarkerEmployeesHandler(HttpExchange exchange) {
         renderTemplate(exchange, "employees.ftl", getEmployeesDataModel());
     }
+
+    private void registerHandler(HttpExchange exchange) throws IOException {
+        String method = exchange.getRequestMethod();
+
+        if ("GET".equalsIgnoreCase(method)) {
+
+            renderTemplate(exchange, "register.ftl", new HashMap<>());
+        } else if ("POST".equalsIgnoreCase(method)) {
+
+            Map<String, String> formData = Utils.parseFormData(exchange);
+            String fullName = formData.get("fullName");
+            String email = formData.get("email");
+            String password = formData.get("password");
+
+            System.out.println("Получены данные: " + formData);
+
+            boolean exists = employees.stream().anyMatch(emp -> emp.getEmail().equalsIgnoreCase(email));
+
+            if (exists) {
+                renderTemplate(exchange, "register.ftl", Map.of("error", "Пользователь с таким email уже зарегистрирован"));
+            } else {
+
+                int newId = employees.size() + 1;
+                Employees newEmployee = new Employees(newId, fullName, email, password, List.of(), List.of());
+                employees.add(newEmployee);
+
+                System.out.println("Новый сотрудник: " + newEmployee);
+
+                try {
+                    Utils.saveToFile("src/data/employees.json", employees);
+                } catch (IOException e) {
+                    System.err.println("Ошибка при сохранении данных в файл");
+                    e.printStackTrace();
+                }
+
+                renderTemplate(exchange, "success.ftl", Map.of("name", fullName));
+            }
+        }
+
+        exchange.sendResponseHeaders(200, 0);
+        exchange.close();
+    }
+
+
 
     private Map<String, Object> getBooksDataModel() {
         Map<String, Object> dataModel = new HashMap<>();

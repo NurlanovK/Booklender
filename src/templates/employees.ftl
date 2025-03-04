@@ -19,14 +19,16 @@
         <tr>
             <td>${emp.id!}</td>
             <td>${emp.fullName!}</td>
-            <td>${emp.currentBooks?size}</td>  <!-- Отображаем количество текущих книг -->
-            <td>${emp.pastBooks?size}</td>     <!-- Отображаем количество прочитанных книг -->
+            <td>${emp.currentBooks?size}</td>
+            <td>${emp.pastBooks?size}</td>
             <td><a href="/employees-details?id=${emp.id}">Подробнее</a></td>
         </tr>
         </#list>
     </table>
     <br>
     <a href="index">На главную</a><br>
-    <a href="register">Зарегистрировать нового сотрудника</a>
+    <a href="register">Зарегистрировать нового сотрудника</a><br>
+    <a href="login">Зайти в профиль сотрудника</a>
+
 </body>
 </html>

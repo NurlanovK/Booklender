@@ -6,11 +6,12 @@
     "password": "password1",
     "currentBooks": [
       "1984",
-      "Harry Potter"
+      "1984"
     ],
     "pastBooks": [
       "Naruto",
-      "It"
+      "It",
+      "Harry Potter"
     ]
   },
   {
@@ -19,12 +20,12 @@
     "email": "vasiliy@example.com",
     "password": "password2",
     "currentBooks": [
-      "1984",
-      "Harry Potter"
+      "1984"
     ],
     "pastBooks": [
       "Naruto",
-      "It"
+      "It",
+      "Harry Potter"
     ]
   },
   {

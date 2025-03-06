@@ -22,7 +22,7 @@
             <td>${book.author!}</td>
 
 
-            <td><img src="${book.cover}" alt="Обложка" width="50"></td>
+            <td><img src="${book.cover}" alt="Обложка" width="50" height="80"></td>
             <td><a href="book-details?id=${book.id}">Подробнее</a></td>
         </tr>
         </#list>

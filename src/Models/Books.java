@@ -6,6 +6,11 @@ public class Books {
     private String title;
     private String author;
     private String description;
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     private String status;
     private String cover;
 

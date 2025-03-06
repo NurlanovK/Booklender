@@ -10,10 +10,8 @@ import Models.Books;
 import Models.Employees;
 import java.lang.reflect.Type;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RequestHandler {
     private HttpServer server;
@@ -41,6 +39,7 @@ public class RequestHandler {
         server.createContext("/issue-book", this::issueBookHandler);
         server.createContext("/return-book", this::returnBookHandler);
         server.createContext("/select-action", this::selectActionHandler);
+        server.createContext("/profile", this::profileHandler);
     }
 
     private void serveImage(HttpExchange exchange) {
@@ -82,11 +81,77 @@ public class RequestHandler {
     }
 
     private void singleBookHandler(HttpExchange exchange) {
-        renderTemplate(exchange, "book-details.ftl", getSingleBookDataModel(books.get(0)));
+        Map<String, String> params = getQueryParams(exchange);
+        String idParam = params.get("id");
+
+        if (idParam != null) {
+            try {
+                int bookId = Integer.parseInt(idParam);
+                Books book = books.stream()
+                        .filter(b -> b.getId() == bookId)
+                        .findFirst()
+                        .orElse(null);
+
+                if (book != null) {
+                    renderTemplate(exchange, "book-details.ftl", getSingleBookDataModel(book));
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        sendNotFoundResponse(exchange);
     }
 
     private void singleEmployeeHandler(HttpExchange exchange) {
-        renderTemplate(exchange, "employees-details.ftl", getSingleEmployeeDataModel(employees.get(0)));
+        Map<String, String> params = getQueryParams(exchange);
+        String idParam = params.get("id");
+
+        if (idParam != null) {
+            try {
+                int employeeId = Integer.parseInt(idParam);
+                Employees employee = employees.stream()
+                        .filter(e -> e.getId() == employeeId)
+                        .findFirst()
+                        .orElse(null);
+
+                if (employee != null) {
+                    renderTemplate(exchange, "employees-details.ftl", getSingleEmployeeDataModel(employee));
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        sendNotFoundResponse(exchange);
+    }
+
+
+    private Map<String, String> getQueryParams(HttpExchange exchange) {
+        Map<String, String> queryParams = new HashMap<>();
+        String query = exchange.getRequestURI().getQuery();
+        if (query != null) {
+            for (String param : query.split("&")) {
+                String[] keyValue = param.split("=");
+                if (keyValue.length == 2) {
+                    queryParams.put(keyValue[0], keyValue[1]);
+                }
+            }
+        }
+        return queryParams;
+    }
+
+
+    private void sendNotFoundResponse(HttpExchange exchange) {
+        try {
+            String response = "404 Not Found";
+            exchange.sendResponseHeaders(404, response.length());
+            try (OutputStream os = exchange.getResponseBody()) {
+                os.write(response.getBytes());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void freemarkerBooksHandler(HttpExchange exchange) {
@@ -154,7 +219,7 @@ public class RequestHandler {
 
                 exchange.getResponseHeaders().add("Set-Cookie", "session_id=" + sessionId + "; Path=/; HttpOnly; SameSite=Lax");
 
-                exchange.getResponseHeaders().add("Location", "/select-action");
+                exchange.getResponseHeaders().add("Location", "/profile");
                 exchange.sendResponseHeaders(302, -1);
             } else {
                 exchange.getResponseHeaders().add("Location", "/login?error=Неверные данные");
@@ -162,6 +227,22 @@ public class RequestHandler {
             }
         }
     }
+    public void profileHandler(HttpExchange exchange) throws IOException {
+        System.out.println("Запрос на /profile");
+
+        String sessionId = getSessionId(exchange);
+        Employees employee = sessions.get(sessionId);
+
+        if (employee == null) {
+            exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
+            return;
+        }
+
+        renderTemplate(exchange, "profile.ftl", getSingleEmployeeDataModel(employee));
+
+    }
+
 
 
     public void selectActionHandler(HttpExchange exchange) throws IOException {
@@ -201,13 +282,37 @@ public class RequestHandler {
     }
 
 
-    private void issueBookHandler(HttpExchange exchange) throws IOException {
+    private void loadBooksFromFile() {
+        this.books = Utils.readFile("src/data/books.json", new TypeToken<List<Books>>() {}.getType());
+    }
+
+    private void loadEmployeesFromFile() {
+        this.employees = Utils.readFile("src/data/employees.json", new TypeToken<List<Employees>>() {}.getType());
+    }
+
+    private void saveBooksToFile() {
+        try {
+            Utils.saveToFile("src/data/books.json", books);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveEmployeesToFile() {
+        try {
+            Utils.saveToFile("src/data/employees.json", employees);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void issueBookHandler(HttpExchange exchange) throws IOException {
         String sessionId = getSessionId(exchange);
         Employees employee = sessions.get(sessionId);
 
         if (employee == null) {
-            exchange.sendResponseHeaders(302, -1);
             exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
             return;
         }
 
@@ -216,8 +321,13 @@ public class RequestHandler {
             return;
         }
 
+        // Фильтруем книги только со статусом "Free"
+        List<Books> availableBooks = books.stream()
+                .filter(book -> book.getStatus().equalsIgnoreCase("Free"))
+                .collect(Collectors.toList());
+
         if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) {
-            renderTemplate(exchange, "issue-book.ftl", getBooksDataModel());
+            renderTemplate(exchange, "issue-book.ftl", Map.of("books", availableBooks));
             return;
         }
 
@@ -225,28 +335,38 @@ public class RequestHandler {
             Map<String, String> formData = Utils.parseFormData(exchange);
             String bookTitle = formData.get("bookTitle");
 
-            if (bookTitle != null && books.stream().anyMatch(book -> book.getTitle().equals(bookTitle))) {
+            Books selectedBook = books.stream()
+                    .filter(book -> book.getTitle().equals(bookTitle) && book.getStatus().equalsIgnoreCase("Free"))
+                    .findFirst()
+                    .orElse(null);
+
+            if (selectedBook != null) {
                 employee.getCurrentBooks().add(bookTitle);
-                Utils.saveToFile("src/data/employees.json", employees);
+                selectedBook.setStatus("Busy");
+
+                // Сохранение книг и сотрудников в файлы
+                saveBooksToFile();
+                saveEmployeesToFile();
+
                 renderTemplate(exchange, "noerror.ftl", Map.of("message", "Книга успешно выдана"));
             } else {
-                renderTemplate(exchange, "error.ftl", Map.of("error", "Книга не найдена"));
+                renderTemplate(exchange, "error.ftl", Map.of("error", "Книга недоступна"));
             }
         }
     }
 
-    private void returnBookHandler(HttpExchange exchange) throws IOException {
+    public void returnBookHandler(HttpExchange exchange) throws IOException {
         String sessionId = getSessionId(exchange);
         Employees employee = sessions.get(sessionId);
 
         if (employee == null) {
-            exchange.sendResponseHeaders(302, -1);
             exchange.getResponseHeaders().add("Location", "/login");
+            exchange.sendResponseHeaders(302, -1);
             return;
         }
 
         if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) {
-            List<String> availableBooks = getBooksThatCanBeReturned(employee);
+            List<String> availableBooks = new ArrayList<>(employee.getCurrentBooks());
             renderTemplate(exchange, "return-book.ftl", Map.of(
                     "books", availableBooks,
                     "employee", employee
@@ -260,13 +380,25 @@ public class RequestHandler {
 
             if (bookTitle != null && employee.getCurrentBooks().remove(bookTitle)) {
                 employee.getPastBooks().add(bookTitle);
-                Utils.saveToFile("src/data/employees.json", employees);
+
+                Books returnedBook = books.stream()
+                        .filter(book -> book.getTitle().equals(bookTitle))
+                        .findFirst()
+                        .orElse(null);
+
+                if (returnedBook != null) {
+                    returnedBook.setStatus("Free");
+                    saveBooksToFile();
+                }
+
+                saveEmployeesToFile();
                 renderTemplate(exchange, "noerror.ftl", Map.of("message", "Книга успешно возвращена"));
             } else {
                 renderTemplate(exchange, "error.ftl", Map.of("error", "Книга не найдена в вашем списке"));
             }
         }
     }
+
 
     private List<String> getBooksThatCanBeReturned(Employees employee) {
         return employee.getCurrentBooks();

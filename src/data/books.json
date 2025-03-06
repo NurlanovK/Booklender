@@ -5,16 +5,15 @@
     "author": "Joanne Rowling",
     "description": "A story about a young wizard.",
     "status": "Free",
-    "cover": "/images/1984-Big-Brother.jpg"
+    "cover": "/images/pottah.jpg"
   },
   {
     "id": 2,
     "title": "Sherlock Holmes",
     "author": "Arthur Conan Doyle",
     "description": "A detective solving mysteries.",
-    "status": "Busy",
-    "cover": "/images/1984-Big-Brother.jpg"
-
+    "status": "Free",
+    "cover": "/images/holmes.jpg"
   },
   {
     "id": 3,
@@ -26,18 +25,42 @@
   },
   {
     "id": 4,
-    "title": "The Invisible Man",
-    "author": "Ralph Ellison",
-    "description": "A novel about social issues.",
+    "title": "Fight Club",
+    "author": "Chuck Palanik",
+    "description": "Two crazy man fight each other and making friends(maybe one crazy man).",
     "status": "Free",
-    "cover": "/images/1984-Big-Brother.jpg"
+    "cover": "/images/----- ----.jpg"
   },
   {
     "id": 5,
-    "title": "Gone with the Wind",
-    "author": "Margaret Mitchell",
-    "description": "A historical romance novel.",
+    "title": "Naruto",
+    "author": "Masashi Kishimoto",
+    "description": "Sasuke come back to Konoha!!!.",
     "status": "Busy",
-    "cover": "/images/1984-Big-Brother.jpg"
+    "cover": "/images/naruto.jpg"
+  },
+  {
+    "id": 6,
+    "title": "It",
+    "author": "Stephen King",
+    "description": "Evil clown eats kids",
+    "status": "Free",
+    "cover": "/images/it.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Idiot",
+    "author": "Fyodor Dostoevsky",
+    "description": "I don\u0027t know lol))",
+    "status": "Busy",
+    "cover": "/images/idiot.jpg"
+  },
+  {
+    "id": 8,
+    "title": "The Big Short",
+    "author": "Michael Lewis",
+    "description": "Many smart men making money",
+    "status": "Free",
+    "cover": "/images/short.jpg"
   }
 ]

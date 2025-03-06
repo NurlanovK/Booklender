@@ -5,13 +5,10 @@
     "email": "dmitriy@example.com",
     "password": "password1",
     "currentBooks": [
-      "1984",
-      "1984"
+      "Idiot"
     ],
     "pastBooks": [
-      "Naruto",
-      "It",
-      "Harry Potter"
+      "Naruto"
     ]
   },
   {
@@ -20,41 +17,25 @@
     "email": "vasiliy@example.com",
     "password": "password2",
     "currentBooks": [
-      "1984"
+      "Naruto"
     ],
-    "pastBooks": [
-      "Naruto",
-      "It",
-      "Harry Potter"
-    ]
+    "pastBooks": []
   },
   {
     "id": 3,
     "fullName": "Иванов Иван",
     "email": "ivanov@example.com",
     "password": "password3",
-    "currentBooks": [
-      "1984",
-      "Harry Potter"
-    ],
-    "pastBooks": [
-      "Naruto",
-      "It"
-    ]
+    "currentBooks": [],
+    "pastBooks": []
   },
   {
     "id": 4,
     "fullName": "Петров Петр",
     "email": "petrov@example.com",
     "password": "password4",
-    "currentBooks": [
-      "1984",
-      "Harry Potter"
-    ],
-    "pastBooks": [
-      "Naruto",
-      "It"
-    ]
+    "currentBooks": [],
+    "pastBooks": []
   },
   {
     "id": 5,
